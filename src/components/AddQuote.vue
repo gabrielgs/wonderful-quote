@@ -19,8 +19,6 @@
     data: function () {
       return {
         quote: {
-          cant: 1,
-          percentage: 5,
           lastId: 0,
           quote: ''
         }
@@ -28,8 +26,13 @@
     },
     methods: {
       addQuote() {
-        this.quote.lastId = this.quotes[ this.quotes.length - 1 ].id
+        this.quote.lastId = this.quotes.length === 0
+          ? this.quote.lastId
+          : this.quotes[ this.quotes.length - 1 ].id
+
         eventBus.$emit('addQuote', this.quote)
+
+        this.quote.quote = ''
       }
     }
   }

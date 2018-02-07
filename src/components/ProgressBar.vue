@@ -1,26 +1,27 @@
 <template>
   <div class="column">
-    <progress class="progress is-info"  :value="quotes" max="10" data-label="1/10"></progress>
-    <span :style="{ left: `${left}%` }">{{ quotes }}/10</span>
+    <progress class="progress is-info"  :value="quoteCount" max="10"></progress>
+    <span :style="{ left: `${left}%` }"
+      v-if="quoteCount > 0">{{ quoteCount }} / {{ maxQuotes }}</span>
   </div>
 </template>
 <script>
   import { eventBus } from '../main'
   export default {
+    props: ['quoteCount', 'maxQuotes'],
     data: function () {
       return {
-          quotes: 1,
-          left: 5
+        left: 5
       }
     },
     created() {
       eventBus.$on('addQuote', (item) => {
-        this.quotes += item.cant
-        this.left += item.percentage
+        if ( this.quoteCount < this.maxQuotes ) {
+          this.left += 5
+        }
       })
 
       eventBus.$on('deleteQuote', () => {
-        this.quotes -= 1
         this.left -= 5
       })
     }
@@ -33,7 +34,10 @@
 
   .progress {
     margin: 0;
-    transition: all 1s ease
+  }
+
+  .progress::-webkit-progress-value {
+    transition: width 0.5s ease;
   }
 
   span {

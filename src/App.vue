@@ -2,7 +2,7 @@
   <div id="app">
     <div class="container">
       <h1>Quotes Added</h1>
-      <app-progress></app-progress>
+      <app-progress :quoteCount="quotes.length" :maxQuotes="maxQuotes"></app-progress>
       <add-quote :quotes="quotes"></add-quote>
       <div class="columns is-multiline">
         <app-quotes v-for="quote in quotes"
@@ -32,16 +32,23 @@
       return {
         quotes: [
           { id: 1, quote: 'The life is greatful'},
-        ]
+        ],
+        maxQuotes: 10
       }
     },
 
     created() {
       eventBus.$on('addQuote', ( quote ) => {
+        if ( this.quotes.length >= this.maxQuotes ) {
+          return alert('Please delete a quote first')
+        }
+
         this.quotes.push({
           id: quote.lastId + 1,
           quote: quote.quote
         })
+
+        console.log(this.quotes)
       })
 
       eventBus.$on('deleteQuote', (quote) => {
