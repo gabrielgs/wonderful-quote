@@ -18,6 +18,11 @@
         this.quotes += item.cant
         this.left += item.percentage
       })
+
+      eventBus.$on('deleteQuote', () => {
+        this.quotes -= 1
+        this.left -= 5
+      })
     }
   }
 </script>
